@@ -1,6 +1,9 @@
-use teloxide::{Bot, types::Message, requests::Requester};
+use teloxide::{requests::Requester, types::Message, Bot};
 
-use crate::types::{state::{HandlerResult, MyDialogue, State}, json_response::{RustPlayGroundRequest, RustPlayGroundResponse}};
+use crate::types::{
+    json_response::{RustPlayGroundRequest, RustPlayGroundResponse},
+    state::{HandlerResult, MyDialogue, State},
+};
 
 pub async fn send_code(bot: Bot, msg: Message, dialogue: MyDialogue) -> HandlerResult {
     if let Some(text) = msg.text() {
@@ -35,8 +38,8 @@ pub async fn send_code(bot: Bot, msg: Message, dialogue: MyDialogue) -> HandlerR
         return Ok(());
     }
 
-
-    bot.send_message(msg.chat.id, "Write a code, that you want to compile").await?;
+    bot.send_message(msg.chat.id, "Write a code, that you want to compile")
+        .await?;
     dialogue.update(State::SendRustCode).await?;
     Ok(())
 }

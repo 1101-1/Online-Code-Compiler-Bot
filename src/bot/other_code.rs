@@ -1,15 +1,23 @@
 use teloxide::{requests::Requester, types::Message, Bot};
 
-use crate::types::{state::{HandlerResult, MyDialogue, State}, json_response::{PythonPlayGroundRequest, PythonPlayGroundResponse}};
+use crate::types::{
+    json_response::{OtherPlayGroundRequest, OtherPlayGroundResponse},
+    state::{HandlerResult, MyDialogue},
+};
 
-pub async fn send_code(bot: Bot, msg: Message, dialogue: MyDialogue) -> HandlerResult {
-    if let Some(text) = msg.clone().text() {
+pub async fn send_code(
+    bot: Bot,
+    msg: Message,
+    dialogue: MyDialogue,
+    lang: String,
+) -> HandlerResult {
+    if let Some(text) = msg.text() {
         let client = reqwest::Client::new();
-        let playground_req = serde_json::to_string(&PythonPlayGroundRequest {
+        let playground_req = serde_json::to_string(&OtherPlayGroundRequest {
             code: text.to_string(),
             codeld: None,
             input: String::from(""),
-            language: String::from("py")
+            language: lang,
         })
         .unwrap();
 
@@ -21,15 +29,14 @@ pub async fn send_code(bot: Bot, msg: Message, dialogue: MyDialogue) -> HandlerR
             .await?
             .text()
             .await?;
-        let playground_res: PythonPlayGroundResponse= serde_json::from_str(&response).unwrap();
+        let playground_res: OtherPlayGroundResponse = serde_json::from_str(&response).unwrap();
         let result = playground_res.data.output;
         bot.send_message(msg.chat.id, format!("{}", result)).await?;
         dialogue.exit().await?;
         return Ok(());
     }
 
-
-    bot.send_message(msg.chat.id, "Write a code, that you want to compile").await?;
-    dialogue.update(State::SendRustCode).await?;
+    bot.send_message(msg.chat.id, "Write a code, that you want to compile")
+        .await?;
     Ok(())
 }

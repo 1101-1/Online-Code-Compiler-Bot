@@ -11,8 +11,8 @@ use crate::types::state::{HandlerResult, MyDialogue, State};
 pub enum Command {
     #[command(description = "Display all commands.")]
     Help,
-    #[command(description = "Compile code on Python lang")]
-    Python,
+    #[command(description = "Compile code on chosen lang")]
+    OtherLang,
     #[command(description = "Compile code on Rust lang")]
     Rust,
     #[command(description = "Return to main menu")]
@@ -30,9 +30,11 @@ pub async fn command_handler(
             bot.send_message(msg.chat.id, Command::descriptions().to_string())
                 .await?
         }
-        Command::Python => {
-            dialogue.update(State::SendPythonCode).await?;
-            bot.send_message(msg.chat.id, "Send python code, that need to compile")
+        Command::OtherLang => {
+            dialogue.update(State::RecieveLang).await?;
+            bot.send_message(msg.chat.id, "Send name of lang, that need to compile code")
+                .await?;
+            bot.send_message(msg.chat.id, "Available [Go] [Java] [C++] [Python] [C#]")
                 .await?
         }
         Command::Rust => {

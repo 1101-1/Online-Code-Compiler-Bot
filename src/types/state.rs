@@ -4,7 +4,10 @@ use teloxide::{dispatching::dialogue::InMemStorage, prelude::Dialogue};
 pub enum State {
     #[default]
     HandleCommand,
-    SendPythonCode,
+    RecieveLang,
+    SetLangCode {
+        lang: String,
+    },
     SendRustCode,
 }
 

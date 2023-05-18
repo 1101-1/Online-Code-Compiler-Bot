@@ -12,7 +12,7 @@ use teloxide::{
 };
 
 use crate::bot::command::{command_handler, invalid_command, Command};
-use crate::bot::{python_code, rust_code};
+use crate::bot::{other_code, recieve_lang, rust_code};
 use crate::types::state::State;
 
 mod bot;
@@ -40,13 +40,13 @@ async fn main() {
                 .branch(dptree::endpoint(invalid_command)),
         )
         .branch(
-            dptree::case![State::SendPythonCode]
+            dptree::case![State::RecieveLang]
                 .branch(
                     dptree::entry()
                         .filter_command::<Command>()
                         .endpoint(command_handler),
                 )
-                .branch(dptree::endpoint(python_code::send_code)),
+                .branch(dptree::endpoint(recieve_lang::code_type_update)),
         )
         .branch(
             dptree::case![State::SendRustCode]
@@ -56,6 +56,15 @@ async fn main() {
                         .endpoint(command_handler),
                 )
                 .branch(dptree::endpoint(rust_code::send_code)),
+        )
+        .branch(
+            dptree::case![State::SetLangCode { lang }]
+                .branch(
+                    dptree::entry()
+                        .filter_command::<Command>()
+                        .endpoint(command_handler),
+                )
+                .branch(dptree::endpoint(other_code::send_code)),
         );
 
     Dispatcher::builder(bot, handler)

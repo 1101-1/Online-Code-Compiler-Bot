@@ -18,7 +18,7 @@ pub struct RustPlayGroundResponse {
 }
 
 #[derive(Serialize, Debug)]
-pub struct PythonPlayGroundRequest {
+pub struct OtherPlayGroundRequest {
     pub code: String,
     pub codeld: Option<String>,
     pub input: String,
@@ -26,7 +26,7 @@ pub struct PythonPlayGroundRequest {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct PythonPlayGroundResponse {
+pub struct OtherPlayGroundResponse {
     pub success: bool,
     pub errors: Vec<String>,
     pub data: Data,
@@ -34,13 +34,13 @@ pub struct PythonPlayGroundResponse {
 
 #[derive(Debug, Deserialize)]
 pub struct Data {
-    pub source_code: String,
+    pub sourceCode: String,
     pub status: i32,
-    pub error_code: i32,
+    pub errorCode: i32,
     pub error: Option<String>,
-    pub output_type: i32,
+    pub outputType: i32,
     pub output: String,
-    pub output_style: Option<String>,
+    pub outputStyle: Option<String>,
     pub date: String,
     pub language: String,
     pub input: String,
