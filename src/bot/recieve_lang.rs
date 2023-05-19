@@ -11,7 +11,7 @@ pub async fn code_type_update(bot: Bot, msg: Message, dialogue: MyDialogue) -> H
                         lang: String::from("py"),
                     })
                     .await?;
-                bot.send_message(msg.chat.id, "Selected lang is Python.Now send code")
+                bot.send_message(msg.chat.id, "Selected lang is Python. Now send code")
                     .await?;
                 return Ok(());
             }
@@ -21,7 +21,7 @@ pub async fn code_type_update(bot: Bot, msg: Message, dialogue: MyDialogue) -> H
                         lang: String::from("go"),
                     })
                     .await?;
-                bot.send_message(msg.chat.id, "Selected lang is Go.Now send code")
+                bot.send_message(msg.chat.id, "Selected lang is Go. Now send code")
                     .await?;
                 return Ok(());
             }
@@ -31,7 +31,7 @@ pub async fn code_type_update(bot: Bot, msg: Message, dialogue: MyDialogue) -> H
                         lang: String::from("java"),
                     })
                     .await?;
-                bot.send_message(msg.chat.id, "Selected lang is Java.Now send code")
+                bot.send_message(msg.chat.id, "Selected lang is Java. Now send code")
                     .await?;
                 return Ok(());
             }
@@ -41,7 +41,7 @@ pub async fn code_type_update(bot: Bot, msg: Message, dialogue: MyDialogue) -> H
                         lang: String::from("cs"),
                     })
                     .await?;
-                bot.send_message(msg.chat.id, "Selected lang is C#.Now send code")
+                bot.send_message(msg.chat.id, "Selected lang is C#. Now send code")
                     .await?;
                 return Ok(());
             }
@@ -51,7 +51,7 @@ pub async fn code_type_update(bot: Bot, msg: Message, dialogue: MyDialogue) -> H
                         lang: String::from("cpp"),
                     })
                     .await?;
-                bot.send_message(msg.chat.id, "Selected lang is C++.Now send code")
+                bot.send_message(msg.chat.id, "Selected lang is C++. Now send code")
                     .await?;
                 return Ok(());
             }

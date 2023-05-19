@@ -32,6 +32,7 @@ pub struct OtherPlayGroundResponse {
     pub data: Data,
 }
 
+#[allow(non_snake_case)]
 #[derive(Debug, Deserialize)]
 pub struct Data {
     pub sourceCode: String,

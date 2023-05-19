@@ -9,6 +9,7 @@ pub enum State {
         lang: String,
     },
     SendRustCode,
+    AutoCompile,
 }
 
 pub type MyDialogue = Dialogue<State, InMemStorage<State>>;

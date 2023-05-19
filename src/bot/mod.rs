@@ -1,3 +1,4 @@
+pub mod auto_define;
 pub mod command;
 pub mod other_code;
 pub mod recieve_lang;
