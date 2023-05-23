@@ -1,4 +1,4 @@
-use teloxide::{payloads::SendMessageSetters, requests::Requester, types::Message, Bot};
+use teloxide::{requests::Requester, types::Message, Bot};
 
 use crate::types::{
     json_response::{RustPlayGroundRequest, RustPlayGroundResponse},
@@ -35,8 +35,7 @@ pub async fn send_code(bot: Bot, msg: Message, dialogue: MyDialogue) -> HandlerR
         };
 
         if result.is_empty() {
-            bot.send_message(msg.chat.id, "_empty result_")
-                .parse_mode(teloxide::types::ParseMode::MarkdownV2)
+            bot.send_message(msg.chat.id, "ㅤ")
                 .await?;
             dialogue.exit().await?;
             return Ok(());
