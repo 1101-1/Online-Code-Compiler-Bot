@@ -12,7 +12,9 @@ use teloxide::{
 };
 
 use crate::bot::command::{command_handler, invalid_command, Command};
-use crate::bot::{code_types::auto_define, code_types::other_code, states::recieve_lang, code_types::rust_code};
+use crate::bot::{
+    code_types::auto_define, code_types::other_code, code_types::rust_code, states::recieve_lang,
+};
 use crate::types::state::State;
 
 mod bot;

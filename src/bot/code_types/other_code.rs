@@ -2,7 +2,7 @@ use teloxide::{requests::Requester, types::Message, Bot};
 
 use crate::types::{
     json_response::{OtherPlayGroundRequest, OtherPlayGroundResponse},
-    state::{HandlerResult, MyDialogue},
+    state::{HandlerResult, MyDialogue, State},
 };
 
 pub async fn send_code(
@@ -32,7 +32,14 @@ pub async fn send_code(
         let playground_res: OtherPlayGroundResponse = serde_json::from_str(&response).unwrap();
         let result = playground_res.data.output;
         bot.send_message(msg.chat.id, format!("{}", result)).await?;
-        dialogue.exit().await?;
+        bot.send_message(
+            msg.chat.id,
+            String::from(
+                "You can send another one code. To cancel autodetecting just write /cancel",
+            ),
+        )
+        .await?;
+        dialogue.update(State::AutoCompile).await?;
         return Ok(());
     }
 

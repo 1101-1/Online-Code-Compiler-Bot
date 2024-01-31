@@ -47,3 +47,23 @@ pub struct Data {
     pub input: String,
     pub id: i32,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct Candidate {
+    pub content: Content,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Content {
+    pub parts: Vec<Part>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Part {
+    pub text: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct GeminiResult {
+    pub candidates: Vec<Candidate>,
+}

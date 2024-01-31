@@ -34,7 +34,7 @@ pub async fn command_handler(
         }
         Command::Autodetect => {
             dialogue.update(State::AutoCompile).await?;
-            bot.send_message(msg.chat.id, "[BETA] Send code, that need to compile")
+            bot.send_message(msg.chat.id, "AI will define type of code. Send any code in available languages")
                 .await?
         }
         Command::Rust => {
