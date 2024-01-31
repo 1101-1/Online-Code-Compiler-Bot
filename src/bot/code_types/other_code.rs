@@ -2,13 +2,13 @@ use teloxide::{requests::Requester, types::Message, Bot};
 
 use crate::types::{
     json_response::{OtherPlayGroundRequest, OtherPlayGroundResponse},
-    state::{HandlerResult, MyDialogue, State},
+    state::{HandlerResult, MyDialogue},
 };
 
 pub async fn send_code(
     bot: Bot,
     msg: Message,
-    dialogue: MyDialogue,
+    _dialogue: MyDialogue,
     lang: String,
 ) -> HandlerResult {
     if let Some(text) = msg.text() {
@@ -32,14 +32,6 @@ pub async fn send_code(
         let playground_res: OtherPlayGroundResponse = serde_json::from_str(&response).unwrap();
         let result = playground_res.data.output;
         bot.send_message(msg.chat.id, format!("{}", result)).await?;
-        bot.send_message(
-            msg.chat.id,
-            String::from(
-                "You can send another one code. To cancel autodetecting just write /cancel",
-            ),
-        )
-        .await?;
-        dialogue.update(State::AutoCompile).await?;
         return Ok(());
     }
 
