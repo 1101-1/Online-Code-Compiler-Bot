@@ -17,7 +17,6 @@ pub async fn auto_compile(bot: Bot, msg: Message, dialogue: MyDialogue) -> Handl
         return Ok(());
     }
     let code_info = gemini_autodetect(text.clone()).await;
-    bot.send_message(msg.chat.id, code_info.clone()).await?;
 
     match code_info.as_str() {
         "C++" => {
