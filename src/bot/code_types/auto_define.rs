@@ -27,7 +27,7 @@ pub async fn auto_compile(bot: Bot, msg: Message, dialogue: MyDialogue) -> Handl
             bot.send_message(msg.chat.id, "Defined lang is C#. Sending result..").await?;
             other_code::send_code(bot.clone(), msg.clone(), dialogue.clone(), "cs".to_string()).await?;
         }
-        "Java" | _ if text.find("private static void").is_some() => {
+        "Java" => {
             bot.send_message(msg.chat.id, "Defined lang is Java. Sending result..").await?;
             other_code::send_code(bot.clone(), msg.clone(), dialogue.clone(), "java".to_string()).await?;
         }
