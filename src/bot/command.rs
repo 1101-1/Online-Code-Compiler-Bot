@@ -1,3 +1,4 @@
+use teloxide::payloads::SendMessageSetters;
 use teloxide::utils::command::BotCommands;
 use teloxide::{requests::Requester, types::Message, Bot};
 
@@ -13,7 +14,7 @@ pub enum Command {
     Help,
     #[command(description = "Compile code on [Rust] lang")]
     Rust,
-    #[command(description = "[BETA] Send code and bot try to compile it without annotation")]
+    #[command(description = "AI will define type of code. Send any code in available languages")]
     Autodetect,
     #[command(description = "Compile code on chosen lang([Go] [Java] [C++] [Python] [C#])")]
     OtherLang,
@@ -34,7 +35,7 @@ pub async fn command_handler(
         }
         Command::Autodetect => {
             dialogue.update(State::AutoCompile).await?;
-            bot.send_message(msg.chat.id, "AI will define type of code. Send any code in available languages")
+            bot.send_message(msg.chat.id, "Send any available type of code")
                 .await?
         }
         Command::Rust => {
@@ -46,7 +47,7 @@ pub async fn command_handler(
             dialogue.update(State::RecieveLang).await?;
             bot.send_message(msg.chat.id, "Send name of lang, that need to compile code")
                 .await?;
-            bot.send_message(msg.chat.id, "Available [Go] [Java] [C++] [Python] [C#]")
+            bot.send_message(msg.chat.id, "Available __Go__ __Java__ __С\\+\\+__ __Python__ __C\\#__").parse_mode(teloxide::types::ParseMode::MarkdownV2)
                 .await?
         }
         Command::Cancel => {
