@@ -12,64 +12,45 @@ use crate::types::{
 use super::{other_code, rust_code};
 
 pub async fn auto_compile(bot: Bot, msg: Message, dialogue: MyDialogue) -> HandlerResult {
-    if let Some(text) = msg.text() {
-        let text = text.to_string();
-        let code_info = gemini_autodetect(text.clone()).await;
-        if code_info == "C++" {
-            bot.send_message(msg.chat.id, "Defined lang is C++. Sending result..")
-                .await?;
-            other_code::send_code(
-                bot.clone(),
-                msg.clone(),
-                dialogue.clone(),
-                "cpp".to_string(),
-            )
-            .await?;
+    let text = msg.text().map_or_else(|| "".to_string(), |t| t.to_string());
+    if text.is_empty() {
+        return Ok(());
+    }
+    let code_info = gemini_autodetect(text.clone()).await;
+    bot.send_message(msg.chat.id, code_info.clone()).await?;
+
+    match code_info.as_str() {
+        "C++" => {
+            bot.send_message(msg.chat.id, "Defined lang is C++. Sending result..").await?;
+            other_code::send_code(bot.clone(), msg.clone(), dialogue.clone(), "cpp".to_string()).await?;
         }
-        if code_info == "C#" {
-            bot.send_message(msg.chat.id, "Defined lang is C#. Sending result..")
-                .await?;
-            other_code::send_code(bot.clone(), msg.clone(), dialogue.clone(), "cs".to_string())
-                .await?;
+        "C#" => {
+            bot.send_message(msg.chat.id, "Defined lang is C#. Sending result..").await?;
+            other_code::send_code(bot.clone(), msg.clone(), dialogue.clone(), "cs".to_string()).await?;
         }
-        if code_info == "Java" || text.find("private static void").is_some() {
-            bot.send_message(msg.chat.id, "Defined lang is Java. Sending result..")
-                .await?;
-            other_code::send_code(
-                bot.clone(),
-                msg.clone(),
-                dialogue.clone(),
-                "java".to_string(),
-            )
-            .await?;
+        "Java" | _ if text.find("private static void").is_some() => {
+            bot.send_message(msg.chat.id, "Defined lang is Java. Sending result..").await?;
+            other_code::send_code(bot.clone(), msg.clone(), dialogue.clone(), "java".to_string()).await?;
         }
-        if code_info == "Rust" {
-            bot.send_message(msg.chat.id, "Defined lang is Rust. Sending result..")
-                .await?;
+        "Rust" => {
+            bot.send_message(msg.chat.id, "Defined lang is Rust. Sending result..").await?;
             rust_code::send_code(bot.clone(), msg.clone(), dialogue.clone()).await?;
         }
-        if code_info == "Go" {
-            bot.send_message(msg.chat.id, "Defined lang is Go. Sending result..")
-                .await?;
-            other_code::send_code(bot.clone(), msg.clone(), dialogue.clone(), "go".to_string())
-                .await?;
+        "Go" => {
+            bot.send_message(msg.chat.id, "Defined lang is Go. Sending result..").await?;
+            other_code::send_code(bot.clone(), msg.clone(), dialogue.clone(), "go".to_string()).await?;
         }
-        if code_info == "Python" {
-            bot.send_message(msg.chat.id, "Defined lang is Python. Sending result..")
-                .await?;
-            other_code::send_code(bot.clone(), msg.clone(), dialogue.clone(), "py".to_string())
-                .await?;
+        "Python" => {
+            bot.send_message(msg.chat.id, "Defined lang is Python. Sending result..").await?;
+            other_code::send_code(bot.clone(), msg.clone(), dialogue.clone(), "py".to_string()).await?;
         }
-        if code_info == "undefined" {
-            bot.send_message(msg.chat.id, "Defined language compiler can't compile.")
-                .await?;
-            return Ok(());
+        _ => {
+            bot.send_message(msg.chat.id, "Defined language compiler can't compile.").await?;
         }
     }
 
     Ok(())
 }
-
 async fn gemini_autodetect(code: String) -> String {
     let gemini_api_key = env::var("API_KEY").expect("API_KEY does not set");
     let url = format!(
@@ -109,6 +90,5 @@ async fn gemini_autodetect(code: String) -> String {
         .json::<GeminiResult>()
         .await
         .unwrap();
-
     code_type_info.candidates[0].content.parts[0].text.clone()
 }
